@@ -37,7 +37,7 @@ class User extends BaseModel implements
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'primary_role'
+        'first_name', 'last_name', 'email', 'password', 'image', 'primary_role'
     ];
 
     /**
@@ -72,7 +72,8 @@ class User extends BaseModel implements
     public function getValidationRules() {
         return [
             'email' => 'email|max:255|unique:users',
-            'name'  => 'required|min:3',
+            'first_name'  => 'required|min:3',
+            'last_name'  => 'required|min:3',
             'password' => 'required|min:6',
         ];
     }
@@ -140,7 +141,8 @@ class User extends BaseModel implements
         return [
             'user' => [
                 'id' => $this->getKey(),
-                'name' => $this->name,
+                'first_name' => $this->first_name,
+                'last_name' => $this->last_name,
                 'primaryRole' => $this->primaryRole->name,
             ]
         ];

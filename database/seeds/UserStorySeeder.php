@@ -11,9 +11,10 @@ class UserStorySeeder extends BaseSeeder
 
         // Create an admin user
         factory(App\Models\User::class)->create([
-            'name'         => 'Admin',
+            'first_name'   => 'Admin',
+            'last_name'    => 'Doe',
             'email'        => 'admin@admin.com',
-            'primary_role' => $roles->where('name', 'admin')->first()->role_id,
+            'primary_role' => $roles->where('name', 'default')->first()->role_id,
         ]);
 
         // Get some random roles to assign to users

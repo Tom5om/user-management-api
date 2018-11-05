@@ -13,7 +13,6 @@ npm-debug.log
 yarn-error.log
 
 .env
-composer.lock
 
 .phpstorm*
 _ide_helper.php
