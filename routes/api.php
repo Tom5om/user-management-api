@@ -41,8 +41,8 @@ $api->version('v1', ['middleware' => ['api']], function ($api) {
 
     $api->group(['prefix' => 'users'], function ($api) {
         $api->post('/', 'App\Http\Controllers\UserController@post');
+        $api->get('/{id}/photo', 'App\Http\Controllers\UserController@getPhoto');
     });
-
 
     /**
      * Authenticated routes
@@ -57,18 +57,20 @@ $api->version('v1', ['middleware' => ['api']], function ($api) {
                 $api->delete('/token', 'App\Http\Controllers\Auth\AuthController@logout');
             });
 
-            $api->get('/me', 'App\Http\Controllers\Auth\AuthController@getUser');
+//            $api->get('/me', 'App\Http\Controllers\Auth\AuthController@getUser');
+            $api->get('/me', 'App\Http\Controllers\UserController@me');
         });
 
         /**
          * Users
          */
-        $api->group(['prefix' => 'users', 'middleware' => 'check_role:admin'], function ($api) {
+        $api->group(['prefix' => 'users', 'middleware' => 'check_role:default'], function ($api) {
             $api->get('/', 'App\Http\Controllers\UserController@getAll');
             $api->get('/{uuid}', 'App\Http\Controllers\UserController@get');
             $api->put('/{uuid}', 'App\Http\Controllers\UserController@put');
             $api->patch('/{uuid}', 'App\Http\Controllers\UserController@patch');
             $api->delete('/{uuid}', 'App\Http\Controllers\UserController@delete');
+            $api->post('/me/photo', 'App\Http\Controllers\UserController@storePhoto');
         });
 
 
