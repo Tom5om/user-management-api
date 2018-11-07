@@ -39,11 +39,9 @@ class UserController extends Controller
 
         $resource = $this->restfulService->persistResource($user);
 
-        $response = $this->response->item($resource, $this->getTransformer())->setStatusCode(201);
-
         dispatch(new SendVerificationEmail($resource));
         
-        return $response;
+        return $this->response->item($resource, $this->getTransformer())->setStatusCode(201);
     }
 
 
