@@ -37,7 +37,7 @@ class User extends BaseModel implements
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'password', 'image', 'primary_role'
+        'first_name', 'last_name', 'email', 'password', 'image', 'address', 'primary_role'
     ];
 
     /**
@@ -69,9 +69,9 @@ class User extends BaseModel implements
      *
      * @return array Rules
      */
-    public function getValidationRules() {
+    public function getValidationRules($user_id = '') {
         return [
-            'email' => 'email|max:255|unique:users',
+            'email' => 'email|max:255|unique:users,user_id,' . $user_id . ',user_id',
             'first_name'  => 'required|min:3',
             'last_name'  => 'required|min:3',
             'password' => 'required|min:6',

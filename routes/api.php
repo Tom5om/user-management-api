@@ -41,7 +41,7 @@ $api->version('v1', ['middleware' => ['api']], function ($api) {
 
     $api->group(['prefix' => 'users'], function ($api) {
         $api->post('/', 'App\Http\Controllers\UserController@post');
-        $api->get('/{id}/photo', 'App\Http\Controllers\UserController@getPhoto');
+        $api->get('/{id}/photo/{path?}', 'App\Http\Controllers\UserController@getPhoto')->where('path', '(.*)');
     });
 
     /**

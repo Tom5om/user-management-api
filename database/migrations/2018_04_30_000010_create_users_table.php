@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('image')->nullable();
+            $table->string('address')->nullable();
 
             $table->uuid('primary_role')->nullable();
             $table->foreign('primary_role')->references('role_id')->on('roles')->onDelete('set null');
