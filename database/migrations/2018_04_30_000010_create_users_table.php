@@ -24,6 +24,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('image')->nullable();
             $table->string('address')->nullable();
+            $table->tinyInteger('verified')->default(0);
+            $table->string('email_token')->nullable();
 
             $table->uuid('primary_role')->nullable();
             $table->foreign('primary_role')->references('role_id')->on('roles')->onDelete('set null');

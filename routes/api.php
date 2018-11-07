@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\CheckIsVerified;
+use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
 use Illuminate\Http\Request;
 
 /*
@@ -35,13 +37,17 @@ $api->version('v1', ['middleware' => ['api']], function ($api) {
      */
     $api->group(['prefix' => 'auth'], function ($api) {
         $api->group(['prefix' => 'jwt'], function ($api) {
-            $api->get('/token', 'App\Http\Controllers\Auth\AuthController@token');
+            $api->group(['middleware' => ['is_email_verified']], function ($api) {
+                $api->get('/token', 'App\Http\Controllers\Auth\AuthController@token');
+            });
         });
     });
 
     $api->group(['prefix' => 'users'], function ($api) {
         $api->post('/', 'App\Http\Controllers\UserController@post');
         $api->get('/{id}/photo/{path?}', 'App\Http\Controllers\UserController@getPhoto')->where('path', '(.*)');
+
+            $api->get('/verify-email/{token}', 'App\Http\Controllers\UserController@verify');
     });
 
     /**

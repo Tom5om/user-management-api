@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendVerificationEmail;
 use App\Models\Role;
 use App\Models\User;
 use App\Transformers\BaseTransformer;
@@ -23,10 +24,47 @@ class UserController extends Controller
     public function post(Request $request)
     {
         $request['primary_role'] = Role::where('name', 'default')->first()->role_id;
-        $response = parent::post($request);
+
+        $this->authorizeUserAction('create');
+
+        $user = new User();
+
+        $this->restfulService->validateResource($user, $request->input());
+
+        $user = new User($request->input());
+
+        //generate an email token to use for verification
+        // not very secure at this moment, but does the job
+        $user->email_token = md5($user->email);
+
+        $resource = $this->restfulService->persistResource($user);
+
+        $response = $this->response->item($resource, $this->getTransformer())->setStatusCode(201);
+
+        dispatch(new SendVerificationEmail($resource));
+        
         return $response;
     }
 
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param $token
+     * @return \Illuminate\Http\Response
+     */
+    public function verify($token)
+    {
+        $user = User::where('email_token', $token)->first();
+        if (! $user ) {
+            throw new NotFoundHttpException('No user with this token found');
+        }
+
+        $user->verified = 1;
+        $user->save();
+
+        return $this->response->noContent();
+    }
     /**
      * Request to update the specified resource
      *
