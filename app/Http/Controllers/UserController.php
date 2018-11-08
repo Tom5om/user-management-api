@@ -86,7 +86,7 @@ class UserController extends Controller
             throw new StoreResourceFailedException('Could not update resource with UUID "'.$user->getKey().'".', $validator->errors());
         }
 
-        $user->update($data);
+        $this->restfulService->patch($user, $data);
 
         if ($this->shouldTransform()) {
             $response = $this->response->item($user, $this->getTransformer());
