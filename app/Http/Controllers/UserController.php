@@ -33,7 +33,7 @@ class UserController extends Controller
 
         $user = new User($request->input());
 
-        //generate an email token to use for verification
+        // generate an email token to use for verification
         // not very secure at this moment, but does the job
         $user->email_token = md5($user->email);
 
@@ -102,20 +102,24 @@ class UserController extends Controller
 
         $user->update($data);
 
-        if ($this->shouldTransform()) {
-            $response = $this->response->item($user, $this->getTransformer());
-        } else {
-            $response = $user;
-        }
-
-        return $response;
+        return $this->response->item($user, $this->getTransformer());
     }
 
+    /**
+     * Return the user object for the logged in user
+     * @param Request $request
+     * @return \Dingo\Api\Http\Response
+     */
     public function me(Request $request)
     {
         return $this->response->item($this->auth->user(), new BaseTransformer);
     }
 
+    /**
+     * Store an uploaded photo
+     * @param Request $request
+     * @return \Dingo\Api\Http\Response
+     */
     public function storePhoto(Request $request)
     {
         if ($request->hasFile('photo')) {
@@ -130,6 +134,11 @@ class UserController extends Controller
         throw new BadRequestHttpException();
     }
 
+    /**
+     * Output the photo
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse
+     */
     public function getPhoto(Request $request)
     {
         $user = User::findOrFail($request->id);

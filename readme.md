@@ -1,7 +1,7 @@
 ## About this project
 
-This project has been built using Laravel and a boilerplate that I have helped develop with my friend. It provides generic REST functionality out of the box.
-It utilises laradock which will make it easy to set the project up locally.
+This project has been built using Laravel and a boilerplate that I have developed with a friend. It provides generic REST functionality out of the box.
+This project utilises laradock which will make it easy to set the project up locally.
 
 Prerequisites
 * On Linux, probably mac as well (untested on mac)
@@ -13,16 +13,19 @@ Prerequisites
 
 ## Project Setup
 
-1. clone the 2 repos {INSERT REPOS HERE]
-2. Frontend
+1. Frontend
 
 ```bash
+git clone https://github.com/Tom5om/user-management-frontend.git
+cd user-management-frontend
 npm install
 npm run serve
 ```
 
-3. Backend
+2. Backend
 ```bash
+git clone https://github.com/Tom5om/user-management-api.git
+cd user-management-api
 cd laradock
 git submodule init
 git submodule update
@@ -31,13 +34,16 @@ docker-compose up -d
 docker-compose exec --user=laradock workspace bash
 composer install
 composer run post-root-package-install
-cp .env.example .env
 php artisan key:generate
 php artisan jwt:secret
 php artisan ide-helper:generate
 artisan migrate
 php artisan db:seed
 ```
+3. go to http://localhost:8080 & click register
+4. Go to maildev: http://localhost:1080 click the link to verify email
+5. Login
+6. Click on your name on the top left
 
 ## urls
 * Frontend: http://localhost:8080
@@ -56,7 +62,7 @@ php artisan db:seed
 
 
 ## Boilerplate Documentation
-All functionality and use cases provided by this boilerplate are documented n the [Project Wiki](https://github.com/specialtactics/l5-api-boilerplate/wiki).
+All functionality and use cases provided by this boilerplate are documented in the [Project Wiki](https://github.com/specialtactics/l5-api-boilerplate/wiki).
 
 ## Check out the documentation of supporting projects
 
