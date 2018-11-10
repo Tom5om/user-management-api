@@ -40,11 +40,11 @@ php artisan db:seed
 ```
 
 ## urls
-Frontend: http://localhost:8080
-Backend: http://localhost
-Telescope: http://localhost/telescope
-Maildev: http://localhost:1080
-PHPmyadmin: http://localhost:8079 -- host: mariadb --username: default --password: secret
+* Frontend: http://localhost:8080
+* Backend: http://localhost
+* Telescope: http://localhost/telescope
+* Maildev: http://localhost:1080
+* PHPmyadmin: http://localhost:8079 -- host: mariadb --username: default --password: secret
 
 ## Application example
 1. Go to register -> register a user
