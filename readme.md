@@ -15,10 +15,12 @@ Prerequisites
 
 1. clone the 2 repos {INSERT REPOS HERE]
 2. Frontend
+
 ```bash
 npm install
 npm run serve
-``` b
+```
+
 3. Backend
 ```bash
 cd laradock
@@ -35,7 +37,7 @@ php artisan jwt:secret
 php artisan ide-helper:generate
 artisan migrate
 php artisan db:seed
-``` b
+```
 
 ## urls
 Frontend: http://localhost:8080
