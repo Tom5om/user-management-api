@@ -44,6 +44,20 @@ class UserController extends Controller
         return $this->response->item($resource, $this->getTransformer())->setStatusCode(201);
     }
 
+    /**
+     * Check if email exists
+     * @param $email
+     * @return mixed
+     */
+    public function checkIfEmailExists($email)
+    {
+        $exists = User::where('email', $email)->exists();
+        if ($exists) {
+            return $this->response->array(['exists' => $exists]);
+        }
+        throw new NotFoundHttpException('User does not exist');
+    }
+
 
     /**
      * Handle a registration request for the application.
@@ -86,7 +100,7 @@ class UserController extends Controller
             throw new StoreResourceFailedException('Could not update resource with UUID "'.$user->getKey().'".', $validator->errors());
         }
 
-        $this->restfulService->patch($user, $data);
+        $user->update($data);
 
         if ($this->shouldTransform()) {
             $response = $this->response->item($user, $this->getTransformer());
