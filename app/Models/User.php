@@ -79,6 +79,22 @@ class User extends BaseModel implements
     }
 
     /**
+     * Return the validation rules for photo
+     * @return array
+     */
+    public function getValidationPhotoRules() {
+        return [
+            'photo' => [
+                'required',
+                'file',
+                'min:1', //prevent empty files
+                'max:10240', //max 10mb
+                'mimes:jpg,jpeg,exif,tiff,gif,png,svg',
+            ]
+        ];
+    }
+
+    /**
      * User's primary role
      *
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo

@@ -45,9 +45,9 @@ $api->version('v1', ['middleware' => ['api']], function ($api) {
 
     $api->group(['prefix' => 'users'], function ($api) {
         $api->post('/', 'App\Http\Controllers\UserController@post');
-        $api->get('/{id}/photo/{path?}', 'App\Http\Controllers\UserController@getPhoto')->where('path', '(.*)');
-        $api->get('/verify-email/{token}', 'App\Http\Controllers\UserController@verify');
-        $api->get('/email-exists/{email}', 'App\Http\Controllers\UserController@checkIfEmailExists');
+        $api->get('/{user}/photo/{path?}', 'App\Http\Controllers\UserController@getPhoto')->where('path', '(.*)');
+        $api->get('/verification/{token}', 'App\Http\Controllers\UserController@verify');
+        $api->get('/email/{email}', 'App\Http\Controllers\UserController@checkIfEmailExists');
     });
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserCreated;
 use App\Jobs\SendVerificationEmail;
 use App\Models\Role;
 use App\Models\User;
@@ -23,25 +24,17 @@ class UserController extends Controller
      */
     public function post(Request $request)
     {
+        /**
+         * Add the primary role default for now
+         */
         $request['primary_role'] = Role::where('name', 'default')->first()->role_id;
 
-        $this->authorizeUserAction('create');
+        /** @var User $user */
+        $user = parent::post($request);
 
-        $user = new User();
+        event(new UserCreated($user));
 
-        $this->restfulService->validateResource($user, $request->input());
-
-        $user = new User($request->input());
-
-        // generate an email token to use for verification
-        // not very secure at this moment, but does the job
-        $user->email_token = md5($user->email);
-
-        $resource = $this->restfulService->persistResource($user);
-
-        dispatch(new SendVerificationEmail($resource));
-        
-        return $this->response->item($resource, $this->getTransformer())->setStatusCode(201);
+        return $this->response->item($user, $this->getTransformer())->setStatusCode(201);
     }
 
     /**
@@ -72,12 +65,14 @@ class UserController extends Controller
             throw new NotFoundHttpException('No user with this token found');
         }
 
-        $user->verified = 1;
+        $user->verified = true;
         $user->save();
 
         return $this->response->noContent();
     }
     /**
+     * Overriding User's patch so to pass in the userId on validation
+     *
      * Request to update the specified resource
      *
      * @param string $uuid UUID of the resource
@@ -94,10 +89,11 @@ class UserController extends Controller
 
         $data = $request->input();
 
+        //Passing the userId into the validation rules to not have a duplicate error when the user is updated
         $validator = Validator::make($data, array_intersect_key($user->getValidationRules($user->user_id), $data), $user->getValidationMessages());
 
         if ($validator->fails()) {
-            throw new StoreResourceFailedException('Could not update resource with UUID "'.$user->getKey().'".', $validator->errors());
+            throw new StoreResourceFailedException('Could not update User with UUID "'.$user->getKey().'".', $validator->errors());
         }
 
         $user->update($data);
@@ -123,9 +119,19 @@ class UserController extends Controller
     public function storePhoto(Request $request)
     {
         if ($request->hasFile('photo')) {
-            $path = $request->photo->store('storage/uploads', 'public');
 
             $user = $this->auth->user();
+
+            $photo = $request->photo;
+
+            $validator = Validator::make(['photo' => $photo], $user->getValidationPhotoRules());
+
+            if ($validator->fails()) {
+                throw new StoreResourceFailedException('Could not save the photo, please try again', $validator->errors());
+            }
+
+            $path = $photo->store('storage/uploads', 'public');
+
             $user->image = $path;
             $user->save();
 
@@ -136,12 +142,11 @@ class UserController extends Controller
 
     /**
      * Output the photo
-     * @param Request $request
+     * @param User $user
      * @return \Symfony\Component\HttpFoundation\StreamedResponse
      */
-    public function getPhoto(Request $request)
+    public function getPhoto(User $user)
     {
-        $user = User::findOrFail($request->id);
 
         if (Storage::exists('public/'.$user->image)) {
             return Storage::download('public/'.$user->image);

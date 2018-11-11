@@ -1,13 +1,13 @@
 {
-    "name": "specialtactics/l5-api-boilerplate",
-    "description": "An API boilerplate for Laravel 5",
-    "keywords": ["laravel", "boilerplate", "api", "api boilerplate", "laravel api"],
+    "name": "Tom5om/user-management-api",
+    "description": "An API to manage your users",
+    "keywords": ["laravel", "api", "laravel api"],
     "license": "MIT",
     "type": "project",
     "authors": [
         {
-            "name": "Max Snow",
-            "email": "contact@maxsnow.me"
+            "name": "Tom Somerville",
+            "email": "tom@somerville.nl"
         }
     ],
     "require": {

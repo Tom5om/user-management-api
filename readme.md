@@ -60,10 +60,6 @@ php artisan db:seed
 5. For the profile manage page, click on your name in the top left
 5. Update profile or upload an image
 
-
-## Boilerplate Documentation
-All functionality and use cases provided by this boilerplate are documented in the [Project Wiki](https://github.com/specialtactics/l5-api-boilerplate/wiki).
-
 ## Check out the documentation of supporting projects
 
 Every great project stands on the shoulders of giants. Check out the documentation of these key projects to learn more.
