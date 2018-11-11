@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Events\UserCreated;
-use App\Jobs\SendVerificationEmail;
 use App\Models\Role;
 use App\Models\User;
 use App\Transformers\BaseTransformer;
